@@ -4,7 +4,7 @@ CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror
 
-LIBFT		= @cd libft && make
+LIBFT		= @cd libft && make bonus
 
 LIB			= libft/libft.a
 
@@ -16,7 +16,7 @@ USLEEP		= -D SLEEP_TIME=
 # /!\ Values that are too small WON'T work!
 # [Default: 100]
 
-SLEEP_TIME	= 1000
+SLEEP_TIME	= 100
 
 # Names
 
@@ -75,15 +75,15 @@ check_relink:
 		$(MAKE) $(SRV_NAME) $(CLI_NAME); \
 	fi
 
-$(SRV_NAME)			: $(SRV_OBJ) libft
+$(SRV_NAME): libft $(SRV_OBJ)
 	@$(CC) $(CFLAGS) $(SRV_OBJ) $(LIB) -o $(SRV_NAME)
 	$(SRV_DONE)
 
-$(CLI_NAME)			: $(CLI_OBJ) libft
+$(CLI_NAME): libft $(CLI_OBJ)
 	@$(CC) $(CFLAGS) $(CLI_OBJ) $(LIB) -o $(CLI_NAME)
 	$(CLI_DONE)
 
-$(OBJ_FOLDER)%.o	: srcs/%.c
+$(OBJ_FOLDER)%.o: srcs/%.c
 	@$(CC) $(CFLAGS) -c $< -o $@ $(USLEEP)$(SLEEP_TIME) -I $(INCLUDES)
 
 libft : 

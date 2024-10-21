@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 22:37:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/19 15:37:02 by marvin           ###   ########.fr       */
+/*   Updated: 2024/10/21 16:04:59 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,6 @@ int	main(int argc, char **argv)
 		send_char(pid, *str);
 		str++;
 	}
-	send_char(pid, '\n');
+	send_char(pid, '\0');
 	return (0);
 }

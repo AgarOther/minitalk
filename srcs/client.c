@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 22:37:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/21 16:48:34 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/10/21 21:07:54 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	main(int argc, char **argv)
 		send_char(pid, *str);
 		str++;
 	}
+	usleep(SLEEP_TIME * 1.5);
 	send_char(pid, '\0');
 	return (0);
 }

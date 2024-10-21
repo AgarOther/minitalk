@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 22:37:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/21 16:04:59 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/10/21 16:48:34 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ int	main(int argc, char **argv)
 	if (!has_valid_args(argc, argv))
 		return (0);
 	pid = ft_atoi(argv[1]);
+	if (pid < 0)
+		return (0);
 	str = argv[2];
 	signal(SIGUSR1, test);
 	while (*str)

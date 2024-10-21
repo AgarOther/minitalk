@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 23:45:02 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/21 16:15:18 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/10/21 16:56:14 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_putlst(t_list *lst)
 	}
 	*str = 0;
 	ft_putstr_fd(str, 1);
-	free(str);
+	//free(str);
 }
 
 void	reconstruct_char(int sig)
@@ -56,10 +56,10 @@ void	reconstruct_char(int sig)
 	bits++;
 	if (bits == 8)
 	{
-		if (!head)
-			head = str;
 		printf("bit received: %d (%c)\n", c, c);
 		str = ft_lstnew(ft_chardup(c));
+		if (!head)
+			head = str;
 		printf("char received: %d (%c)\n", *(char*)str->content, *(char*)str->content);
 		str = str->next;
 		if (c == 0)

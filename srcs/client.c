@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 22:37:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/21 21:07:54 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/10/22 09:46:02 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,6 @@ int	has_valid_args(int argc, char **argv)
 	return (1);
 }
 
-void test(int sig)
-{
-	(void) sig;
-	ft_putstr_fd("oue", 1);
-}
-
 int	main(int argc, char **argv)
 {
 	int		pid;
@@ -82,7 +76,6 @@ int	main(int argc, char **argv)
 	if (pid < 0)
 		return (0);
 	str = argv[2];
-	signal(SIGUSR1, test);
 	while (*str)
 	{
 		send_char(pid, *str);

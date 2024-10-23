@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 23:45:02 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/21 21:02:23 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/10/22 12:45:49 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	reconstruct_char(int sig)
 	kill(sig, SIGUSR1);
 }
 
-
 void	program_stopped(int sig)
 {
 	(void) sig;
@@ -72,13 +71,39 @@ void	program_stopped(int sig)
 	exit (0);
 }
 
+void	print_shrek(void)
+{
+	ft_putendl_fd("\033[92m", 1);
+	ft_putendl_fd("⢀⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣤⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆", 1);
+	ft_putendl_fd("⠀⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠁⠸⣼⡿", 1);
+	ft_putendl_fd("⠀⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠉⠈⠉⠀⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠻⠿⠿⠿⠿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
+	ft_putchar_fd('\n', 1);
+	ft_putstr_fd("\033[0m", 1);
+}
+
 int	main(void)
 {
 	int	pid;
 
 	pid = getpid();
-	ft_putstr_fd("Server's PID: ", 1);
+	print_shrek();
+	ft_putstr_fd("Server's PID:	", 1);
 	ft_putnbr_fd(pid, 1);
+	ft_putchar_fd('\n', 1);
+	ft_putstr_fd("Sleep Time:	", 1);
+	ft_putnbr_fd(SLEEP_TIME, 1);
 	ft_putchar_fd('\n', 1);
 	signal(SIGUSR1, reconstruct_char);
 	signal(SIGUSR2, reconstruct_char);

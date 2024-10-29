@@ -23,6 +23,5 @@ void	ft_lstcharclear(t_list **lst)
 		temp = (*lst)->next;
 		free(*lst);
 		*lst = temp;
-		
 	}
 }

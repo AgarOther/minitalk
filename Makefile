@@ -4,7 +4,7 @@ CC			= cc
 
 CFLAGS		= -Wall -Wextra -Werror
 
-LIBFT		= @cd libft && make bonus
+LIBFT		= @make bonus -C ./libft
 
 LIB			= libft/libft.a
 
@@ -96,13 +96,13 @@ libft :
 clean :
 	@rm -f $(CLI_OBJ) $(SRV_OBJ)
 	@cd libft && make clean
-	@rm -r $(OBJ_FOLDER)
+	@rm -rf $(OBJ_FOLDER)
 	$(ALL_CLEAN)
 
 fclean :
 	@rm -f $(CLI_NAME) $(SRV_NAME) $(CLI_OBJ) $(SRV_OBJ)
 	@cd libft && make fclean
-	@rm -r $(OBJ_FOLDER)
+	@rm -rf $(OBJ_FOLDER)
 	$(ALL_FCLEAN)
 
 re : fclean all

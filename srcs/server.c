@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 23:45:02 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/29 10:35:30 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/08 20:22:35 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,17 @@ void	ft_putlst(t_list *lst)
 	free(str);
 }
 
-void	reconstruct_char(int sig)
+void	reconstruct_char(int sig, siginfo_t *info, void *context)
 {
 	static char		c = 0;
 	static int		bits = 0;
 	static t_list	*head = NULL;
 	t_list			*new_node;
 
+	(void) context;
 	if (sig == SIGUSR1)
 		c |= (1 << bits);
-	bits++;
-	if (bits == 8)
+	if (++bits == 8)
 	{
 		new_node = ft_lstnew(c);
 		if (!head)
@@ -60,6 +60,7 @@ void	reconstruct_char(int sig)
 		c = 0;
 		bits = 0;
 	}
+	kill(info->si_pid, SIGUSR1);
 }
 
 void	print_rick(void)
@@ -110,7 +111,9 @@ void	print_shrek(void)
 
 int	main(void)
 {
-	int	pid;
+	int					pid;
+	struct sigaction	sig;
+	
 
 	pid = getpid();
 	if (pid % 2 == 0)
@@ -120,11 +123,11 @@ int	main(void)
 	ft_putstr_fd("Server's PID:	", 1);
 	ft_putnbr_fd(pid, 1);
 	ft_putchar_fd('\n', 1);
-	ft_putstr_fd("Sleep Time:	", 1);
-	ft_putnbr_fd(SLEEP_TIME, 1);
-	ft_putchar_fd('\n', 1);
-	signal(SIGUSR1, reconstruct_char);
-	signal(SIGUSR2, reconstruct_char);
+	sigemptyset(&sig.sa_mask);
+	sig.sa_sigaction = reconstruct_char;
+	sig.sa_flags = SA_SIGINFO;
+	sigaction(SIGUSR1, &sig, NULL);
+	sigaction(SIGUSR2, &sig, NULL);
 	while (1)
 		pause();
 }

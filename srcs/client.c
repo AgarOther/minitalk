@@ -6,11 +6,19 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 22:37:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/22 09:46:02 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/08 20:21:58 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+volatile int	g_allow_signal = 0;
+
+void	allow_signal(int pid)
+{
+	(void) pid;
+	g_allow_signal = 1;
+}
 
 void	send_char(int pid, char c)
 {
@@ -24,11 +32,14 @@ void	send_char(int pid, char c)
 		else
 			kill(pid, SIGUSR2);
 		i++;
-		usleep(SLEEP_TIME);
+		signal(SIGUSR1, allow_signal);
+		while (!g_allow_signal)
+			pause();
+		g_allow_signal = 0;
 	}
 }
 
-int	is_pid(char *str)
+static int	is_pid(char *str)
 {
 	int	i;
 
@@ -81,7 +92,6 @@ int	main(int argc, char **argv)
 		send_char(pid, *str);
 		str++;
 	}
-	usleep(SLEEP_TIME * 1.5);
 	send_char(pid, '\0');
 	return (0);
 }

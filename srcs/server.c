@@ -6,13 +6,13 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 23:45:02 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/08 20:22:35 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/10 13:15:53 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void	ft_putlst(t_list *lst)
+void	ft_putlst(t_list *lst, int pid)
 {
 	int		size;
 	char	*str;
@@ -32,6 +32,17 @@ void	ft_putlst(t_list *lst)
 	str[i] = 0;
 	ft_putendl_fd(str, 1);
 	free(str);
+	kill(pid, SIGUSR2);
+}
+
+void	interrupt(t_list **head, void *context)
+{
+	(void) context;
+	ft_lstcharclear(head);
+	usleep(10000);
+	ft_putendl_fd("\n\033[31mServer closed and leak-free!\033[0m", 1);
+	sleep(1);
+	exit(0);
 }
 
 void	reconstruct_char(int sig, siginfo_t *info, void *context)
@@ -41,9 +52,10 @@ void	reconstruct_char(int sig, siginfo_t *info, void *context)
 	static t_list	*head = NULL;
 	t_list			*new_node;
 
-	(void) context;
 	if (sig == SIGUSR1)
 		c |= (1 << bits);
+	else if (sig == SIGINT)
+		return (interrupt(&head, context));
 	if (++bits == 8)
 	{
 		new_node = ft_lstnew(c);
@@ -53,38 +65,13 @@ void	reconstruct_char(int sig, siginfo_t *info, void *context)
 			ft_lstadd_back(&head, new_node);
 		if (c == 0)
 		{
-			ft_putlst(head);
+			ft_putlst(head, info->si_pid);
 			ft_lstcharclear(&head);
-			head = NULL;
 		}
 		c = 0;
 		bits = 0;
 	}
 	kill(info->si_pid, SIGUSR1);
-}
-
-void	print_rick(void)
-{
-	ft_putendl_fd("\033[38;5;208m", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣶⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⣿⣿⠿⠟⠛⠻⣿⠆⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣆⣀⣀⠀⣿⠂⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠻⣿⣿⣿⠅⠛⠋⠈⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢼⣿⣿⣿⣃⠠⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣟⡿⠃⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣛⣛⣛⡄⠀⢸⣦⣀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⠀⠀⢀⣠⣴⣾⡆⠸⣿⣿⣿⡷⠂⠨⣿⣿⣿⣿⣶⣦⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠀⣤⣾⣿⣿⣿⣿⡇⢀⣿⡿⠋⠁⢀⡶⠪⣉⢸⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣿⣿⡏⢸⣿⣷⣿⣿⣷⣦⡙⣿⣿⣿⣿⣿⡏⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣇⢸⣿⣿⣿⣿⣿⣷⣦⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⠀⠀⠀", 1);
-	ft_putendl_fd("⠀⠀⠀⢹⣿⣵⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⡁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀", 1);
-	ft_putchar_fd('\n', 1);
-	ft_putstr_fd("\033[0m", 1);
 }
 
 void	print_shrek(void)
@@ -113,13 +100,9 @@ int	main(void)
 {
 	int					pid;
 	struct sigaction	sig;
-	
 
 	pid = getpid();
-	if (pid % 2 == 0)
-		print_shrek();
-	else
-		print_rick();
+	print_shrek();
 	ft_putstr_fd("Server's PID:	", 1);
 	ft_putnbr_fd(pid, 1);
 	ft_putchar_fd('\n', 1);
@@ -128,6 +111,7 @@ int	main(void)
 	sig.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
+	sigaction(SIGINT, &sig, NULL);
 	while (1)
 		pause();
 }

@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 19:57:55 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/10/22 12:43:06 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:51:52 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,5 @@ void	ft_lstcharclear(t_list **lst)
 		free(*lst);
 		*lst = temp;
 	}
+	*lst = NULL;
 }

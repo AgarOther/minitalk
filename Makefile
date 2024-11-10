@@ -9,13 +9,15 @@ CLI_NAME	=	client
 SRV_NAME	=	server
 
 # Sources & Includes
-CLI_SRC		= 	srcs/client.c
+CLI_SRC		= 	srcs/client.c \
+				srcs/client_utils.c
 SRV_SRC		=	srcs/server.c
 OBJ_FOLDER	=	objs
 INCLUDES	=	includes
 
 # Objects
-CLI_OBJ		= 	$(OBJ_FOLDER)/client.o
+CLI_OBJ		= 	$(OBJ_FOLDER)/client.o \
+				$(OBJ_FOLDER)/client_utils.o
 SRV_OBJ		= 	$(OBJ_FOLDER)/server.o
 
 # Custom Makefile Flags

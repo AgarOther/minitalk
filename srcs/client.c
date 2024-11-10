@@ -6,7 +6,7 @@
 /*   By: scraeyme <scraeyme@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 22:37:41 by scraeyme          #+#    #+#             */
-/*   Updated: 2024/11/08 20:21:58 by scraeyme         ###   ########.fr       */
+/*   Updated: 2024/11/10 13:14:39 by scraeyme         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,24 @@ void	allow_signal(int pid)
 {
 	(void) pid;
 	g_allow_signal = 1;
+}
+
+void	await_signal(void)
+{
+	int	timeout;
+
+	timeout = 0;
+	while (timeout <= 10000 && !g_allow_signal)
+	{
+		usleep(1);
+		timeout++;
+	}
+	if (timeout >= 10000)
+	{
+		ft_putendl_fd("\n\033[31mNo response from server, aborting!\033[0m", 1);
+		sleep(1);
+		exit(0);
+	}
 }
 
 void	send_char(int pid, char c)
@@ -33,47 +51,16 @@ void	send_char(int pid, char c)
 			kill(pid, SIGUSR2);
 		i++;
 		signal(SIGUSR1, allow_signal);
-		while (!g_allow_signal)
-			pause();
+		await_signal();
 		g_allow_signal = 0;
 	}
 }
 
-static int	is_pid(char *str)
+void	server_message(int pid)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	has_valid_args(int argc, char **argv)
-{
-	if (argc == 1 || argc > 3)
-	{
-		ft_putstr_fd
-			("\033[31m[Error] Expected server PID and message.\033[0m\n", 1);
-		return (0);
-	}
-	else if (argc == 2)
-	{
-		ft_putstr_fd
-			("\033[31m[Error] Expected message after PID.\033[0m\n", 1);
-		return (0);
-	}
-	if (!is_pid(argv[1]))
-	{
-		ft_putstr_fd
-			("\033[31m[Error] Invalid PID.\033[0m\n", 1);
-		return (0);
-	}
-	return (1);
+	(void) pid;
+	ft_putendl_fd("\033[0;32mServer successfully received a message!", 1);
+	exit(0);
 }
 
 int	main(int argc, char **argv)
@@ -84,9 +71,14 @@ int	main(int argc, char **argv)
 	if (!has_valid_args(argc, argv))
 		return (0);
 	pid = ft_atoi(argv[1]);
-	if (pid < 0)
+	if (pid <= 0 || kill(pid, 0))
+	{
+		ft_putstr_fd
+			("\033[31m[Error] Invalid PID.\033[0m\n", 1);
 		return (0);
+	}
 	str = argv[2];
+	signal(SIGUSR2, server_message);
 	while (*str)
 	{
 		send_char(pid, *str);
